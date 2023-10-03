@@ -10,15 +10,15 @@ import { useWindowSize } from "./core/hooks/useWindowSize";
 function App() {
   const steps: Step[] = [
     {
-      component: <VendorForm />,
+      component: (props) => <VendorForm {...props} />,
       name: "Vendor Details",
     },
     {
-      component: <VendorLocationForm />,
+      component: (props) => <VendorLocationForm {...props} />,
       name: "Vendor Locations",
     },
     {
-      component: <VendorReview />,
+      component: (props) => <VendorReview {...props} />,
       name: "Review",
     },
   ];
@@ -46,7 +46,7 @@ function App() {
             console.info("Next Clicked");
           }}
           onFinish={() => {
-            console.info("onFinish");
+            console.info("Submit the entire call to the backend API");
           }}
         />
       </div>

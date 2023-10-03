@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
+import { StepButtonsProps } from "..";
 
 export interface Step {
   name: string;
-  component: ReactNode;
+  component: (props: StepButtonsProps) => ReactNode;
 }

@@ -1,16 +1,11 @@
-import { FieldArray, Form, Formik } from "formik";
-import { CustomContentContainer } from "../../atoms/CustomContentContainer/CustomContentContainer";
-import { noOp } from "../../../core/util/noop";
-import { FormInputBox } from "../../atoms/FormInputBox/FormInputBox";
-import { formikCreateFieldArrayName } from "../../../core/util/formikCreateFieldArrayName";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/solid";
-
-export interface VendorLocation {
-  name: string;
-  location: string;
-  numberOfEmployees: string;
-}
+import { FieldArray, Form, Formik } from "formik";
+import { formikCreateFieldArrayName } from "../../../core/util/formikCreateFieldArrayName";
+import { CustomContentContainer } from "../../atoms/CustomContentContainer/CustomContentContainer";
+import { FormInputBox } from "../../atoms/FormInputBox/FormInputBox";
+import { StepButtons, StepButtonsProps } from "../../stepper";
+import { VendorLocation } from "../models/VendorLocation";
 
 export interface VendorLocationFormValues {
   locations: VendorLocation[];
@@ -27,7 +22,14 @@ const defaultLocation = {
   numberOfEmployees: "",
 };
 
-export function VendorLocationForm() {
+export function VendorLocationForm({
+  onNext,
+  onPrev,
+  isFirstStep,
+  isLastStep,
+  onFinish,
+  onCancel,
+}: StepButtonsProps) {
   const initialValues: VendorLocationFormValues = {
     locations: [defaultLocation],
   };
@@ -35,12 +37,17 @@ export function VendorLocationForm() {
   const addLocation = (push: (obj: VendorLocation) => void) => {
     push(defaultLocation);
   };
+
+  const onSubmit = (values: VendorLocationFormValues) => {
+    console.info({ values });
+  };
+
   return (
-    <CustomContentContainer>
-      <Formik initialValues={initialValues} onSubmit={noOp}>
-        {({ values }) => {
-          return (
-            <Form>
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      {({ values, submitForm }) => {
+        return (
+          <Form>
+            <CustomContentContainer>
               <FieldArray name={locationsKey}>
                 {({ remove, push }) => (
                   <div className="space-y-2">
@@ -103,10 +110,21 @@ export function VendorLocationForm() {
                   </div>
                 )}
               </FieldArray>
-            </Form>
-          );
-        }}
-      </Formik>
-    </CustomContentContainer>
+            </CustomContentContainer>
+            <StepButtons
+              onNext={() => {
+                submitForm();
+                onNext();
+              }}
+              onPrev={onPrev}
+              onCancel={onCancel}
+              onFinish={onFinish}
+              isLastStep={isLastStep}
+              isFirstStep={isFirstStep}
+            />
+          </Form>
+        );
+      }}
+    </Formik>
   );
 }

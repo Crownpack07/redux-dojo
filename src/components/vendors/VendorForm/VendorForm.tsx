@@ -1,17 +1,8 @@
 import { Form, Formik } from "formik";
 import { CustomContentContainer } from "../../atoms/CustomContentContainer/CustomContentContainer";
-import { noOp } from "../../../core/util/noop";
 import { FormInputBox } from "../../atoms/FormInputBox/FormInputBox";
-
-export interface VendorFormValues {
-  companyName: string;
-  contactNumber: string;
-  Email: string;
-  streetAddress: string;
-  addressLine2?: string;
-  city: string;
-  country: string;
-}
+import { VendorFormValues } from "../models/VendorFormValues";
+import { StepButtons, StepButtonsProps } from "../../stepper";
 
 export const companyNameKey: keyof VendorFormValues = "companyName";
 export const contactNumberKey: keyof VendorFormValues = "contactNumber";
@@ -31,50 +22,78 @@ const initialValues: VendorFormValues = {
   country: "",
 };
 
-export function VendorForm() {
+export function VendorForm({
+  onNext,
+  onPrev,
+  isFirstStep,
+  isLastStep,
+  onFinish,
+  onCancel,
+}: StepButtonsProps) {
+  const onSubmit = (values: VendorFormValues) => {
+    console.info(values);
+  };
+
   return (
-    <CustomContentContainer>
-      <Formik initialValues={initialValues} onSubmit={noOp}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      {({ submitForm }) => (
         <Form>
-          <div className="flex flex-col gap-y-4">
-            <div className="font-bold">Vendor Details</div>
-            <hr />
-            <div className="grid grid-cols-2 gap-4">
+          <CustomContentContainer>
+            <div className="flex flex-col gap-y-4">
+              <div className="font-bold">Vendor Details</div>
+              <hr />
+              <div className="grid grid-cols-2 gap-4">
+                <FormInputBox
+                  name={companyNameKey}
+                  label="Company Name"
+                  placeholder="Enter Company Name"
+                />
+                <FormInputBox
+                  name={contactNumberKey}
+                  label="Contact Number"
+                  placeholder="000 000 0000"
+                />
+                <FormInputBox
+                  name={emailKey}
+                  label="Company Email"
+                  placeholder="Enter Company Email"
+                />
+              </div>
+              <div className="font-bold">Office Address</div>
+              <hr />
               <FormInputBox
-                name={companyNameKey}
-                label="Company Name"
-                placeholder="Enter Company Name"
+                name={streetAddressKey}
+                label="Street Address"
+                placeholder=""
               />
               <FormInputBox
-                name={contactNumberKey}
-                label="Contact Number"
-                placeholder="000 000 0000"
+                name={addressLine2Key}
+                label="Street Address Line 2"
+                placeholder=""
               />
-              <FormInputBox
-                name={emailKey}
-                label="Company Email"
-                placeholder="Enter Company Email"
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormInputBox name={cityKey} label="City" placeholder="" />
+                <FormInputBox
+                  name={countryKey}
+                  label="Country"
+                  placeholder=""
+                />
+              </div>
             </div>
-            <div className="font-bold">Office Address</div>
-            <hr />
-            <FormInputBox
-              name={streetAddressKey}
-              label="Street Address"
-              placeholder=""
-            />
-            <FormInputBox
-              name={addressLine2Key}
-              label="Street Address Line 2"
-              placeholder=""
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <FormInputBox name={cityKey} label="City" placeholder="" />
-              <FormInputBox name={countryKey} label="Country" placeholder="" />
-            </div>
-          </div>
+          </CustomContentContainer>
+          <StepButtons
+            onNext={() => {
+              submitForm();
+              onNext();
+            }}
+            onPrev={onPrev}
+            onCancel={onCancel}
+            onFinish={onFinish}
+            isLastStep={isLastStep}
+            isFirstStep={isFirstStep}
+          />
         </Form>
-      </Formik>
-    </CustomContentContainer>
+      )}
+    </Formik>
   );
 }

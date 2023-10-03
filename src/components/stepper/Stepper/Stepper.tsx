@@ -2,7 +2,6 @@ import { StepBullets } from "../StepBullets/StepBullets";
 import { Step } from "../models/step";
 import { useState } from "react";
 import { StepBoxes } from "../StepBoxes/StepBoxes";
-import { StepButtons } from "../StepperButtons/StepperButtons";
 interface StepperProps {
   steps: Step[];
   onNext: () => void;
@@ -48,16 +47,15 @@ export function Stepper({
         <StepBoxes steps={steps} currentStep={currentStep} />
       </div>
       <div className="py-4 overflow-auto flex-col flex-grow">
-        {activeStep.component}
+        {activeStep.component({
+          onNext: handleNext,
+          onPrev: handlePrev,
+          isFirstStep: currentStep === 0,
+          isLastStep: currentStep === steps.length - 1,
+          onFinish: onFinish,
+          onCancel: onCancel,
+        })}
       </div>
-      <StepButtons
-        onNext={handleNext}
-        onPrev={handlePrev}
-        onCancel={onCancel}
-        onFinish={onFinish}
-        isLastStep={currentStep === steps.length - 1}
-        isFirstStep={currentStep === 0}
-      />
     </div>
   );
 }
