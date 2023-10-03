@@ -6,6 +6,7 @@ import { VendorLocationForm } from "./components/vendors/VendorLocationForm/Vend
 import { VendorReview } from "./components/vendors/VendorReview/VendorReview";
 import { useEffect } from "react";
 import { useWindowSize } from "./core/hooks/useWindowSize";
+import { useAppSelector } from "./core/app/store";
 
 function App() {
   const steps: Step[] = [
@@ -23,12 +24,13 @@ function App() {
     },
   ];
 
+  const vendor = useAppSelector((state) => state.vendor);
+
   const { height } = useWindowSize();
   useEffect(() => {
     const doc = document.documentElement;
     doc.style.setProperty("--app-height", `${window.innerHeight}px`);
   }, [height]);
-
   return (
     <div className="bg-gray-100  p-4 ">
       <div className="flex flex-row space-x-4 w-full ">
@@ -47,6 +49,7 @@ function App() {
           }}
           onFinish={() => {
             console.info("Submit the entire call to the backend API");
+            console.info("Posting this vendor to the API", { vendor });
           }}
         />
       </div>

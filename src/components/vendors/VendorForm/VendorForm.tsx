@@ -3,6 +3,8 @@ import { CustomContentContainer } from "../../atoms/CustomContentContainer/Custo
 import { FormInputBox } from "../../atoms/FormInputBox/FormInputBox";
 import { VendorFormValues } from "../models/VendorFormValues";
 import { StepButtons, StepButtonsProps } from "../../stepper";
+import { useAppDispatch } from "../../../core/app/store";
+import { setVendorDetails } from "../state/vendor-slice";
 
 export const companyNameKey: keyof VendorFormValues = "companyName";
 export const contactNumberKey: keyof VendorFormValues = "contactNumber";
@@ -30,7 +32,9 @@ export function VendorForm({
   onFinish,
   onCancel,
 }: StepButtonsProps) {
+  const dispatch = useAppDispatch();
   const onSubmit = (values: VendorFormValues) => {
+    dispatch(setVendorDetails({ ...values }));
     console.info(values);
   };
 
