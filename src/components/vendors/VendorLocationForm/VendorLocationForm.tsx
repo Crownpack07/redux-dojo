@@ -6,6 +6,8 @@ import { CustomContentContainer } from "../../atoms/CustomContentContainer/Custo
 import { FormInputBox } from "../../atoms/FormInputBox/FormInputBox";
 import { StepButtons, StepButtonsProps } from "../../stepper";
 import { VendorLocation } from "../models/VendorLocation";
+import { setLocations } from "../state/vendor-slice";
+import { useAppDispatch } from "../../../core/app/store";
 
 export interface VendorLocationFormValues {
   locations: VendorLocation[];
@@ -30,6 +32,7 @@ export function VendorLocationForm({
   onFinish,
   onCancel,
 }: StepButtonsProps) {
+  const dispatch = useAppDispatch();
   const initialValues: VendorLocationFormValues = {
     locations: [defaultLocation],
   };
@@ -39,6 +42,7 @@ export function VendorLocationForm({
   };
 
   const onSubmit = (values: VendorLocationFormValues) => {
+    dispatch(setLocations({ locations: values.locations }));
     console.info({ values });
   };
 
