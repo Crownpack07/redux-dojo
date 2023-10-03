@@ -1,14 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import { Step, Stepper } from "./components/stepper";
+import { VendorForm } from "./components/vendors/VendorForm/VendorForm";
+import { VendorLocationForm } from "./components/vendors/VendorLocationForm/VendorLocationForm";
+import { VendorReview } from "./components/vendors/VendorReview/VendorReview";
+import { useEffect } from "react";
+import { useWindowSize } from "./core/hooks/useWindowSize";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const steps: Step[] = [
+    {
+      component: <VendorForm />,
+      name: "Vendor Details",
+    },
+    {
+      component: <VendorLocationForm />,
+      name: "Vendor Locations",
+    },
+    {
+      component: <VendorReview />,
+      name: "Review",
+    },
+  ];
+
+  const { height } = useWindowSize();
+  useEffect(() => {
+    const doc = document.documentElement;
+    doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+  }, [height]);
 
   return (
-    <>
-      <div>
+    <div className="bg-gray-100  p-4 ">
+      <div className="flex flex-row space-x-4 w-full ">
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -16,20 +39,19 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="h-full ">
+        <Stepper
+          steps={steps}
+          onNext={() => {
+            console.info("Next Clicked");
+          }}
+          onFinish={() => {
+            console.info("onFinish");
+          }}
+        />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
